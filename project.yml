@@ -1,0 +1,63 @@
+name: WhyFi
+options:
+  bundleIdPrefix: io.github.timfurlong
+  deploymentTarget:
+    macOS: "26.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "6"
+    MARKETING_VERSION: 0.1.0
+    CURRENT_PROJECT_VERSION: 1
+    CODE_SIGN_IDENTITY: "-"
+    CODE_SIGN_STYLE: Manual
+    DEVELOPMENT_TEAM: ""
+    ENABLE_HARDENED_RUNTIME: NO
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    SWIFT_STRICT_CONCURRENCY: complete
+targets:
+  WhyFi:
+    type: application
+    platform: macOS
+    sources:
+      - WhyFi
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.timfurlong.WhyFi
+        PRODUCT_NAME: WhyFi
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
+    info:
+      path: WhyFi/App/Info.plist
+      properties:
+        CFBundleDisplayName: WhyFi
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+        NSHumanReadableCopyright: Copyright © 2026 Tim Furlong. MIT License.
+        NSMicrophoneUsageDescription: WhyFi listens while you record a run and turns what you say into a timestamped transcript. Audio stays on your Mac.
+        NSSpeechRecognitionUsageDescription: WhyFi transcribes your narration on your Mac with Apple's on-device speech recognition.
+        NSLocationWhenInUseUsageDescription: macOS shares which Wi-Fi access point you're connected to only with apps that have Location access. WhyFi uses it to show when your Mac switches between your router and a mesh point.
+        NSLocationUsageDescription: macOS shares which Wi-Fi access point you're connected to only with apps that have Location access. WhyFi uses it to show when your Mac switches between your router and a mesh point.
+  WhyFiTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - WhyFiTests
+    dependencies:
+      - target: WhyFi
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.timfurlong.WhyFiTests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/WhyFi.app/Contents/MacOS/WhyFi
+        BUNDLE_LOADER: $(TEST_HOST)
+schemes:
+  WhyFi:
+    build:
+      targets:
+        WhyFi: all
+        WhyFiTests: [test]
+    test:
+      targets:
+        - WhyFiTests
+      gatherCoverageData: false
