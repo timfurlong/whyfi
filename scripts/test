@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Runs the unit tests and prints a short summary. Extra arguments go to xcodebuild,
-# e.g. scripts/test TEST_RUNNER_WHYFI_HARDWARE_TESTS=1 for the tests that need this Mac's
-# Wi-Fi and speech recognition.
+# Runs the unit tests and prints a short summary. Extra arguments go to xcodebuild.
+# Run the tests that need this Mac's Wi-Fi and speech recognition too with
+#   TEST_RUNNER_WHYFI_HARDWARE_TESTS=1 scripts/test
 set -uo pipefail
 cd "$(dirname "$0")/.."
 log=$(mktemp -t whyfi-test)
 xcodebuild test -project WhyFi.xcodeproj -scheme WhyFi -destination 'platform=macOS' "$@" >"$log" 2>&1
 status=$?
-grep -E '(error|warning): |✘|recorded an issue|Test run with|\*\* (TEST|BUILD) ' "$log" | grep -v -E 'appintentsmetadataprocessor|linkd' | sort -u
 echo "full log: $log"
+grep -E '(error|warning): |✘|recorded an issue|\*\* (TEST|BUILD) |Test run with' "$log" | grep -v -E 'appintentsmetadataprocessor|linkd' | sort -u | awk '/Test run with/ {last=$0; next} {print} END {if (last) print last}'
 exit $status
