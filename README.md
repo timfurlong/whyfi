@@ -33,7 +33,7 @@ cd whyfi
 open WhyFi.xcodeproj
 ```
 
-Then press Run. The project signs with "Sign to Run Locally", so you don't need an Apple developer account. macOS may ask for permissions again after you rebuild. To stop that, pick your own team under Signing & Capabilities.
+Then press Run. The project signs with "Sign to Run Locally", so you don't need an Apple developer account. The catch is that macOS treats every rebuild as a new app and asks for the microphone and Location again. To stop that, sign with your own Apple Development certificate: copy `Config/Signing.local.xcconfig.example` to `Config/Signing.local.xcconfig` (it's gitignored) and put your team ID in it.
 
 ## Permissions
 

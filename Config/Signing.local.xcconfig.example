@@ -1,0 +1,4 @@
+// Copy to Signing.local.xcconfig and set your team ID, the 10 characters in parentheses
+// in Xcode's Settings > Accounts, or the "OU" of your Apple Development certificate.
+CODE_SIGN_IDENTITY = Apple Development
+DEVELOPMENT_TEAM = ABCDE12345

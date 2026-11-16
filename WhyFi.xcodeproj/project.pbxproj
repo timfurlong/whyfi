@@ -94,6 +94,7 @@
 		856F4A2ADB723D4831EC8077 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		88A2E1C1722AE123208F6AC6 /* WhyFi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhyFi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		891B164A604F19C0EAB22D79 /* LocationPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPermission.swift; sourceTree = "<group>"; };
+		8A2003212DF44134B548AA61 /* Signing.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.xcconfig; sourceTree = "<group>"; };
 		950948DBEDC11FDD47520EBB /* RunInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunInfo.swift; sourceTree = "<group>"; };
 		A36C141B6235C23660D4085F /* NewRunSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRunSheet.swift; sourceTree = "<group>"; };
 		A9D7AB4B2146DDC132B7E21C /* Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Style.swift; sourceTree = "<group>"; };
@@ -227,10 +228,19 @@
 		CB916F9D281459CA0FB75F23 = {
 			isa = PBXGroup;
 			children = (
+				DB36C9A5DCBE5898A47C9F91 /* Config */,
 				A5C33D569DDE686F3129C377 /* WhyFi */,
 				B56C3958B9D50C793C98113F /* WhyFiTests */,
 				FEFEB929DE8FFA679F08582F /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		DB36C9A5DCBE5898A47C9F91 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				8A2003212DF44134B548AA61 /* Signing.xcconfig */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 		FEFEB929DE8FFA679F08582F /* Products */ = {
@@ -437,6 +447,7 @@
 		};
 		A17065DD5337863BA974FD6E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8A2003212DF44134B548AA61 /* Signing.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -468,12 +479,9 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -542,6 +550,7 @@
 		};
 		F74BED87282A47A29F8F005A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8A2003212DF44134B548AA61 /* Signing.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -573,12 +582,9 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
