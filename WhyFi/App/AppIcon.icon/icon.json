@@ -1,0 +1,49 @@
+{
+  "fill": {
+    "solid": "srgb:0.12549,0.14510,0.36863,1.00000"
+  },
+  "groups": [
+    {
+      "layers": [
+        {
+          "image-name": "pin.svg",
+          "name": "pin",
+          "glass": true
+        }
+      ]
+    },
+    {
+      "layers": [
+        {
+          "image-name": "walls.svg",
+          "name": "walls",
+          "glass": true
+        },
+        {
+          "image-name": "walk.svg",
+          "name": "walk",
+          "glass": false
+        },
+        {
+          "image-name": "ripples.svg",
+          "name": "ripples",
+          "glass": false
+        }
+      ]
+    },
+    {
+      "layers": [
+        {
+          "image-name": "heat.svg",
+          "name": "heat",
+          "glass": false
+        }
+      ]
+    }
+  ],
+  "supported-platforms": {
+    "squares": [
+      "macOS"
+    ]
+  }
+}

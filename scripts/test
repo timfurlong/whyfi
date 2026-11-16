@@ -8,5 +8,8 @@ log=$(mktemp -t whyfi-test)
 xcodebuild test -project WhyFi.xcodeproj -scheme WhyFi -destination 'platform=macOS' "$@" >"$log" 2>&1
 status=$?
 echo "full log: $log"
-grep -E '(error|warning): |✘|recorded an issue|\*\* (TEST|BUILD) |Test run with' "$log" | grep -v -E 'appintentsmetadataprocessor|linkd' | sort -u | awk '/Test run with/ {last=$0; next} {print} END {if (last) print last}'
+grep -E '(error|warning): |✘|recorded an issue|Failing tests:' "$log" | grep -v -E 'appintentsmetadataprocessor|linkd' | sort -u
+grep -A20 '^Failing tests:' "$log" | sed -n '2,/^$/p' | sed '/^$/d'
+grep -E 'Test run with' "$log"
+grep -E '\*\* (TEST|BUILD) [A-Z]+ \*\*' "$log" | tail -1
 exit $status

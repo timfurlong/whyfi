@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 struct ContentView: View {
@@ -30,7 +31,13 @@ struct ContentView: View {
     private var detail: some View {
         if model.store.runs.isEmpty {
             ContentUnavailableView {
-                Label("No runs yet", systemImage: "wifi")
+                VStack(spacing: 12) {
+                    Image(nsImage: NSApplication.shared.applicationIconImage)
+                        .resizable()
+                        .frame(width: 96, height: 96)
+                        .accessibilityHidden(true)
+                    Text("No runs yet")
+                }
             } description: {
                 Text("Start a run, then carry your Mac around and say where you are. WhyFi lines up what you said with the Wi-Fi signal and speed, so you can see what made it drop.")
             } actions: {

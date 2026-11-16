@@ -26,6 +26,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: io.github.timfurlong.WhyFi
         PRODUCT_NAME: WhyFi
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     info:
       path: WhyFi/App/Info.plist
       properties:

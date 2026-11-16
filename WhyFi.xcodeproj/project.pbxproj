@@ -35,6 +35,7 @@
 		73FF0CD357CBF5861ABE7850 /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D7AB4B2146DDC132B7E21C /* Style.swift */; };
 		75CB82620D48A9B2DC0659C0 /* TimelineWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD7559925869AE2C8D40472 /* TimelineWriter.swift */; };
 		75DF834C5C4CCA9CE48C8D14 /* NumbersRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF8D98922355368C7A9A000 /* NumbersRow.swift */; };
+		81F258C6639399A91E75D810 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 110257DF392E9C068E4EE627 /* AppIcon.icon */; };
 		823A534D21D7C35754400651 /* LocationPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891B164A604F19C0EAB22D79 /* LocationPermission.swift */; };
 		99688C3B28989DDDB536A56F /* WhyFiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5010300181390FD150E847FF /* WhyFiApp.swift */; };
 		9F6D5E80A00F53505699D93B /* SpeechModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA0BB2C08481ACF146A6EA54 /* SpeechModel.swift */; };
@@ -66,6 +67,7 @@
 
 /* Begin PBXFileReference section */
 		0E741186A9740694BA5D485F /* SpeechRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecorder.swift; sourceTree = "<group>"; };
+		110257DF392E9C068E4EE627 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = wrapper.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		12C1F4DBF0B3E0FF3D2E0E1F /* RunDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunDetailView.swift; sourceTree = "<group>"; };
 		161FB93A0D981B1704C5342C /* SpeedTestResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedTestResult.swift; sourceTree = "<group>"; };
 		1C04D0B83EEBD40E81229299 /* TimelineCSV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineCSV.swift; sourceTree = "<group>"; };
@@ -198,6 +200,7 @@
 		B5664021340ABCFA6699FC55 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				110257DF392E9C068E4EE627 /* AppIcon.icon */,
 				3CC30B779FF2FF800E766308 /* AppModel.swift */,
 				27A72E6D8C041B345241B1BC /* Info.plist */,
 				5010300181390FD150E847FF /* WhyFiApp.swift */,
@@ -279,6 +282,7 @@
 			buildConfigurationList = B429640BCB9B93F21E6B2F0E /* Build configuration list for PBXNativeTarget "WhyFi" */;
 			buildPhases = (
 				C0A9E9B947F88DCD7ADBC9F7 /* Sources */,
+				286392A7606DDEF0206C7CC6 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -331,6 +335,14 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		286392A7606DDEF0206C7CC6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81F258C6639399A91E75D810 /* AppIcon.icon in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E89DA0551AFFE985F515FD92 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;

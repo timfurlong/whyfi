@@ -6,6 +6,8 @@ import Observation
 @MainActor @Observable
 final class RunRecorder {
     private(set) var isRecording = false
+    /// True from the moment Stop is pressed until the run is closed, so a second Stop does nothing.
+    private(set) var isStopping = false
     private(set) var folder: URL?
     private(set) var startedAt: Date?
     /// Readings while connected. A disconnection shows as a gap between readings.
@@ -95,7 +97,9 @@ final class RunRecorder {
     }
 
     func stop() async {
-        guard isRecording, folder != nil else { return }
+        guard isRecording, !isStopping, folder != nil else { return }
+        isStopping = true
+        defer { isStopping = false }
         for loop in loops { loop.cancel() }
         loops = []
         await speech.stop()
