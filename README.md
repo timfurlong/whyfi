@@ -25,7 +25,7 @@ Audio and transcripts never leave your Mac. The only network traffic is the spee
 ## Requirements
 
 - macOS 26 or later (Apple's on-device transcriber needs it)
-- Xcode 27 to build
+- Xcode 26.6 or later to build
 
 ## Build and run
 
