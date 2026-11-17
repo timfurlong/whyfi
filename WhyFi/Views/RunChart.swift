@@ -23,28 +23,37 @@ struct RunChart: View {
 
     private var signalChart: some View {
         let segments = LoadedRun.segments(run.readings)
-        let markers = run.events.filter { ($0.text ?? "").hasPrefix("access_point_changed") || ($0.text ?? "").hasPrefix("band_changed") }
+        let switches = LoadedRun.switches(run.readings)
+        let labeled = LinkSwitch.labeled(switches, minGap: LinkSwitch.labelGap(forSpan: domain.upperBound.timeIntervalSince(domain.lowerBound)))
         return Chart {
             bands
             ForEach(Array(segments.enumerated()), id: \.offset) { index, segment in
+                let color = Palette.band(segment.first { $0.band != .unknown }?.band ?? .unknown)
                 ForEach(segment, id: \.time) { r in
                     LineMark(x: .value("Time", r.time), y: .value("Signal", min(max(r.rssi, Self.signalFloor), Self.signalCeiling)),
                              series: .value("Segment", index))
-                        .foregroundStyle(Palette.signal)
+                        .foregroundStyle(color)
                         .lineStyle(StrokeStyle(lineWidth: 2))
                         .interpolationMethod(.monotone)
                 }
-            }
-            ForEach(markers, id: \.time) { event in
-                RuleMark(x: .value("Time", event.time))
-                    .foregroundStyle(.secondary)
-                    .lineStyle(StrokeStyle(lineWidth: 1, dash: [2, 3]))
             }
             ForEach(Array(run.sentences.enumerated()), id: \.element.id) { index, sentence in
                 RuleMark(x: .value("Said", sentence.start))
                     .foregroundStyle(Palette.narration.opacity(0.6))
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [3, 3]))
                     .annotation(position: .top, spacing: 0) { Pin(number: index + 1) }
+            }
+            ForEach(Array(switches.enumerated()), id: \.offset) { index, change in
+                RuleMark(x: .value("Switch", change.time))
+                    .foregroundStyle(Self.color(of: change))
+                    .lineStyle(StrokeStyle(lineWidth: 2))
+                    .annotation(position: .overlay, alignment: .bottom, spacing: 6,
+                                overflowResolution: .init(x: .fit(to: .plot), y: .disabled)) {
+                        if labeled[index] {
+                            SwitchLabel(text: change.bandChanged ? change.band.rawValue : "New access point",
+                                        color: Self.color(of: change))
+                        }
+                    }
             }
             if let selectedTime {
                 RuleMark(x: .value("Selected", selectedTime))
@@ -63,8 +72,33 @@ struct RunChart: View {
             }
         }
         .chartXSelection(value: $selectedTime)
-        .overlay(alignment: .topTrailing) { chartTitle("Signal (dBm)") }
+        .overlay(alignment: .topTrailing) { signalTitle }
         .padding(.top, 24)
+    }
+
+    static func color(of change: LinkSwitch) -> Color {
+        Palette.band(change.bandChanged ? change.band : .unknown)
+    }
+
+    /// "Signal (dBm)", plus a key to the line's colors when the run used more than one band.
+    private var signalTitle: some View {
+        var bandsUsed: [WiFiBand] = []
+        for reading in run.readings where reading.band != .unknown && !bandsUsed.contains(reading.band) {
+            bandsUsed.append(reading.band)
+        }
+        return chartTitle {
+            HStack(spacing: 8) {
+                Text("Signal (dBm)")
+                if bandsUsed.count > 1 {
+                    ForEach(bandsUsed, id: \.self) { band in
+                        HStack(spacing: 3) {
+                            Capsule().fill(Palette.band(band)).frame(width: 10, height: 3)
+                            Text(band.rawValue)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @ChartContentBuilder
@@ -90,6 +124,11 @@ struct RunChart: View {
                         y: .value("Download", test.downloadMbps))
                     .foregroundStyle(Palette.speed.gradient)
                     .clipShape(RoundedRectangle(cornerRadius: 2))
+            }
+            ForEach(Array(LoadedRun.switches(run.readings).enumerated()), id: \.offset) { _, change in
+                RuleMark(x: .value("Switch", change.time))
+                    .foregroundStyle(Self.color(of: change))
+                    .lineStyle(StrokeStyle(lineWidth: 2))
             }
             if let selectedTime {
                 RuleMark(x: .value("Selected", selectedTime)).foregroundStyle(Color.primary.opacity(0.5))
@@ -121,7 +160,11 @@ struct RunChart: View {
     }
 
     private func chartTitle(_ text: String) -> some View {
-        Text(text).font(.caption2).foregroundStyle(.secondary)
+        chartTitle { Text(text) }
+    }
+
+    private func chartTitle(@ViewBuilder _ content: () -> some View) -> some View {
+        content().font(.caption2).foregroundStyle(.secondary)
             .padding(.horizontal, 5).padding(.vertical, 1)
             .background(.background.opacity(0.8), in: RoundedRectangle(cornerRadius: 3))
             .padding(4)
@@ -136,6 +179,7 @@ struct RunChart: View {
                 Text(Format.clock(time)).fontWeight(.semibold).monospacedDigit()
                 if let r = nearestReading(to: time) {
                     Text("\(r.rssi) dBm").foregroundStyle(SignalQuality(dBm: r.rssi).color).monospacedDigit()
+                    Text(r.band.rawValue).foregroundStyle(Palette.band(r.band))
                     Text("\(Int(r.txRate)) Mbps link").monospacedDigit()
                 } else {
                     Text("No Wi-Fi").foregroundStyle(.secondary)
@@ -164,6 +208,22 @@ struct RunChart: View {
         run.speedTests.first { $0.start <= time && time <= $0.end }
             ?? run.speedTests.min { abs($0.end.timeIntervalSince(time)) < abs($1.end.timeIntervalSince(time)) }
                 .flatMap { abs($0.end.timeIntervalSince(time)) <= 20 ? $0 : nil }
+    }
+}
+
+/// The tag at the foot of a band or access point switch: "2.4 GHz", "New access point".
+struct SwitchLabel: View {
+    let text: String
+    let color: Color
+
+    var body: some View {
+        Text(text)
+            .font(.system(size: 10, weight: .semibold))
+            .foregroundStyle(.white)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 2)
+            .background(color, in: Capsule())
+            .fixedSize()
     }
 }
 

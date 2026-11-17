@@ -12,7 +12,7 @@ struct NumbersRow: View {
             stat(value: linkRate.map { String(format: "%.0f", $0) }, unit: "Mbps", label: live ? "Link rate" : "Median link rate")
             stat(value: download.map(Format.mbps), unit: "Mbps", label: live ? "Last download" : "Median download")
             if let reading = run.readings.last {
-                stat(value: reading.band.rawValue, unit: "ch \(reading.channel)", label: "Band")
+                bandStat
                 if let bssid = reading.bssid {
                     stat(value: Format.shortBSSID(bssid), unit: nil, label: "Access point")
                 }
@@ -48,8 +48,35 @@ struct NumbersRow: View {
             } else {
                 Text("No Wi-Fi").font(.system(size: 28, weight: .bold, design: .rounded)).foregroundStyle(.secondary)
             }
-            Text(live ? "Signal" : "Median signal").font(.caption).foregroundStyle(.secondary)
+            if mainBand == .ghz2_4 {
+                Text(live ? "Signal, on 2.4 GHz" : "Median signal, mostly 2.4 GHz").font(.caption).foregroundStyle(.orange)
+            } else {
+                Text(live ? "Signal" : "Median signal").font(.caption).foregroundStyle(.secondary)
+            }
         }
+    }
+
+    private var summary: BandSummary? { LoadedRun.bandSummary(run.readings) }
+
+    /// The band now while recording, or the band the run spent the most time on afterwards.
+    private var mainBand: WiFiBand? {
+        live ? run.readings.last?.band : summary?.band
+    }
+
+    private var bandStat: some View {
+        let summary = summary
+        let band = mainBand ?? .unknown
+        let channel = live ? run.readings.last?.channel : summary?.channel
+        let switched = summary?.switchCount ?? 0
+        return VStack(alignment: .leading, spacing: 2) {
+            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                Text(band.rawValue).font(.title3.weight(.semibold)).monospacedDigit()
+                    .foregroundStyle(band == .ghz2_4 ? Color.orange : Color.primary)
+                if let channel { Text("ch \(channel)").font(.caption).foregroundStyle(.secondary) }
+            }
+            Text(switched > 0 ? "Band · switched \(switched)×" : "Band").font(.caption).foregroundStyle(.secondary)
+        }
+        .help(band == .ghz2_4 ? "2.4 GHz reaches farther but is much slower than 5 GHz at the same signal strength." : "")
     }
 
     private func stat(value: String?, unit: String?, label: String) -> some View {

@@ -18,6 +18,16 @@ enum Palette {
     static let signal = Color.blue
     static let speed = Color.teal
     static let narration = Color.orange
+
+    /// The signal line's color on each band.
+    static func band(_ band: WiFiBand) -> Color {
+        switch band {
+        case .ghz5: signal
+        case .ghz2_4: .purple
+        case .ghz6: .indigo
+        case .unknown: .gray
+        }
+    }
 }
 
 enum Format {

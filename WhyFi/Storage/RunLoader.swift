@@ -14,18 +14,52 @@ struct LoadedRun: Sendable {
             .flatMap { abs($0.start.timeIntervalSince(time)) <= 15 ? $0 : nil }
     }
 
-    /// Readings split wherever more than 3 s passed between two of them (Wi-Fi was off),
-    /// so the chart draws a gap instead of a line across it.
+    /// Readings split wherever more than 3 s passed between two of them (Wi-Fi was off), so the
+    /// chart draws a gap instead of a line across it, and wherever the band changed, so each
+    /// stretch can take its band's color. A reading on an unknown band doesn't split anything.
     static func segments(_ readings: [SignalReading]) -> [[SignalReading]] {
         var result: [[SignalReading]] = []
+        var segmentBand: WiFiBand?
         for reading in readings {
-            if let last = result.last?.last, reading.time.timeIntervalSince(last.time) <= 3 {
+            let bandChanged = reading.band != .unknown && segmentBand != nil && reading.band != segmentBand
+            if let last = result.last?.last, reading.time.timeIntervalSince(last.time) <= 3, !bandChanged {
                 result[result.count - 1].append(reading)
             } else {
                 result.append([reading])
+                segmentBand = nil
             }
+            if reading.band != .unknown { segmentBand = reading.band }
         }
         return result
+    }
+
+    /// Every change of band, or of access point on the same band, from one reading to the next.
+    /// Readings on an unknown band and readings without a BSSID are skipped for the comparison.
+    static func switches(_ readings: [SignalReading]) -> [LinkSwitch] {
+        var result: [LinkSwitch] = []
+        var lastBand: WiFiBand?
+        var lastBSSID: String?
+        for reading in readings {
+            let band = reading.band == .unknown ? nil : reading.band
+            if let band, let lastBand, band != lastBand {
+                result.append(LinkSwitch(time: reading.time, band: band, bandChanged: true))
+            } else if let bssid = reading.bssid, let lastBSSID, bssid != lastBSSID, let current = band ?? lastBand {
+                result.append(LinkSwitch(time: reading.time, band: current, bandChanged: false))
+            }
+            if let band { lastBand = band }
+            if let bssid = reading.bssid { lastBSSID = bssid }
+        }
+        return result
+    }
+
+    /// The band with the most readings, its channel and how many times the band changed;
+    /// nil when no reading has a known band.
+    static func bandSummary(_ readings: [SignalReading]) -> BandSummary? {
+        let known = readings.filter { $0.band != .unknown }
+        let counts = Dictionary(grouping: known, by: \.band).mapValues(\.count)
+        guard let band = counts.max(by: { $0.value < $1.value })?.key,
+              let channel = known.last(where: { $0.band == band })?.channel else { return nil }
+        return BandSummary(band: band, channel: channel, switchCount: switches(readings).filter(\.bandChanged).count)
     }
 }
 

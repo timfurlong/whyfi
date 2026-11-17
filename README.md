@@ -49,6 +49,8 @@ Then press Run. The project signs with "Sign to Run Locally", so you don't need 
 2. Walk around. Say where you are and anything that might matter: "In the hall," "Laptop facing the wall," "Next to the fridge."
 3. Click **Stop** (⌘.).
 
+The signal line is blue on 5 GHz and purple on 2.4 GHz, and each switch between bands is labeled on the chart. Watch for those: at the edge of its 5 GHz range a Mac often drops to 2.4 GHz, which shows a stronger signal but much slower downloads.
+
 To compare two setups, walk the same route in the same order each time, and stay about 30 seconds at each spot so a few speed tests finish there.
 
 ### Speed tests and data use
