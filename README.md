@@ -4,9 +4,9 @@
 
 <p align="center">Find out why your Wi-Fi drops. Carry your Mac around, say where you are and what you're doing, and WhyFi lines up what you said with the Wi-Fi signal and download speed at that moment.</p>
 
-![WhyFi showing a walk through a house: the signal falls as the narration reaches "Standing right next to the dryer."](docs/screenshot.png)
+![WhyFi showing a walk through a house: the signal falls from about -40 dBm at the desk to the mid -70s in the bedroom, then climbs back up on the way back.](docs/screenshot.png)
 
-*The screenshot shows a sample walk.*
+*A real walk, with the access point's ID hidden.*
 
 ## Why
 

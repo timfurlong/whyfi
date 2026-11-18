@@ -57,7 +57,7 @@ enum Format {
         value >= 100 ? String(format: "%.0f", value) : String(format: "%.1f", value)
     }
 
-    /// The last two octets of a BSSID, enough to tell access points apart: "c3:9e".
+    /// The last two octets of a BSSID, enough to tell access points apart: "4f:2a".
     static func shortBSSID(_ bssid: String) -> String {
         bssid.split(separator: ":").suffix(2).joined(separator: ":")
     }
